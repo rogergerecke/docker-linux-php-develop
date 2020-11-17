@@ -14,9 +14,9 @@ services:
     container_name: "dstack-mysql"
     image: bitnami/mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=YOUR_PASSWORD_HERE
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=YOUR_PASSWORD_HERE
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - '127.0.0.1:3306:3306'
     volumes:
@@ -26,11 +26,12 @@ services:
   #
   php:
     container_name: "dstack-php"
-    image: bitnami/php-fpm:7.4
+    image: bitnami/php-fpm:${PHP_VERSION}
     depends_on:
       - redis
     volumes:
       - ./www:/app:delegated
+      - ./docker/apache/logs:/opt/bitnami/apache2/logs/
       - ./docker/php/php.ini:/opt/bitnami/php/etc/conf.d/php.ini:ro
 
   # --- Apache 2.4
@@ -56,7 +57,7 @@ services:
     container_name: "dstack-redis"
     image: bitnami/redis:6.0
     environment:
-      - REDIS_PASSWORD=YOUR_PASSWORD_HERE
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
 
   # --- PhpMyAdmin latest
   # Acccess via
